@@ -1,27 +1,40 @@
 import React from "react";
 import { IEpisode } from "./interfaces";
 
-import { EpisodeBox } from "../styles/AppStyles.js";
+/**
+ * styled-components imports
+ */
+import { EpisodeBox, Button } from "./styles/AppStyles";
 
 export default function EpisodesList(props: any): Array<JSX.Element> {
-  const { episodes, toggleFavAction, favorites } = props;
+  const { episodes, toggleFavAction, favorites, store } = props;
+  const {state, dispatch} = store
+  // console.log(state)
   return episodes.map((episode: IEpisode) => {
     return (
       <EpisodeBox key={episode.id}>
-        <img
-          src={episode.image.medium}
-          alt={`Rick and Morty ${episode.name}`}
-        />
-        <div>{episode.name}</div>
+        {episode.image.medium === null ? (
+          null
+        ) : (
+          <img
+            src={episode.image.medium}
+            alt={`The Boondocks ${episode.name}`}
+          />
+        )}
+        {/* {console.log (episode.image.medium === null ? "null" : "")} */}
+        <div style={{fontSize: "1rem"}}>{episode.name}</div>
         <section style={{ display: "flex", justifyContent: "space-between" }}>
-          <div>
+          <div style={{fontSize: "1rem"}}>
             Season: {episode.season} Number: {episode.number}
           </div>
-          <button type="button" onClick={() => toggleFavAction(episode)}>
+          <Button
+            type="button"
+            onClick={() => toggleFavAction(state, dispatch, episode)}
+          >
             {favorites.find((fav: IEpisode) => fav.id === episode.id)
               ? "Unfav"
               : "Fav"}
-          </button>
+          </Button>
         </section>
       </EpisodeBox>
     );
